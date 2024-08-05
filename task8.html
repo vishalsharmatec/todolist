@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>To-Do List</title>
+</head>
+<style>
+    body {
+        height: 100vh;
+        background: #b3cee8;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 600px;
+
+        background: white;
+        border-radius: 10px;
+        padding: 40px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+    }
+
+    input[type="text"] {
+        width: calc(50% - 5px);
+        padding: 10px;
+        color: #111111;
+        border-radius: 5px;
+        font-size: 16px;
+        border: 2px solid #d1d3d4;
+        width: 75%;
+    }
+
+    #button {
+        font-size: 16px;
+        background-color: #0d75ec;
+        border: none;
+        color: #ffffff;
+        cursor: pointer;
+        outline: none;
+        width: 100px;
+        height: 45px;
+        border-radius: 5px;
+        margin-left: 10px;
+    }
+
+    h4 {
+        text-align: center;
+        font-weight: 100%;
+    }
+
+    .fa-trash {
+        margin-left: auto;
+        cursor: pointer;
+    }
+
+    #btn {
+        font-size: 16px;
+        background-color: #0d75ec;
+        border: none;
+        color: #ffffff;
+        width: 20%;
+        height: 55px;
+        border-radius: 5px;
+        margin-top: 20px;
+        float: right;
+    }
+
+    #tasks {
+        text-align: center;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    #tasks th,
+    #tasks td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    #tasks th {
+        background-color: #f2f2f2;
+    }
+
+    #tasks tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    #tasks tr:hover {
+        background-color: #ddd;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#button").click(function () {
+            var title = $('#title').val();
+            var description = $('#description').val()
+            if (title && description) {
+                $("#error").text("");
+                $("#tasks").show();
+                $("#tasks tbody").append('<tr><td><input type="checkbox" class="completed"></td><td>' + title + '</td><td>' + description + '</td><td><i class="fa fa-trash delete"></i></td></tr>');
+                $('#title').val('');
+                $('#description').val('');
+            }
+            else {
+                $("#error").text("Invalid text");
+            }
+        });
+
+        $(document).on('click', '.delete', function () {
+            $(this).closest('tr').remove();
+            if ($("#tasks tbody tr").length === 0) {
+                $("#tasks").hide();
+            }
+            if ($('.completed:checked').length === 0) {
+                $("#btn").hide();
+            }
+        });
+
+        $("#btn").click(function () {
+            $("#tasks tbody").find(".completed:checked").closest("tr").remove();
+            if ($("#tasks tbody tr").length === 0) {
+                $("#tasks").hide();
+            }
+            if ($('.completed:checked').length === 0) {
+                $("#btn").hide();
+            }
+        });
+
+        $("#tasks").on("change", ".completed", function () {
+            if ($('.completed:checked').length > 0) {
+                $("#btn").show();
+            } else {
+                $("#btn").hide();
+            }
+        });
+    });
+
+</script>
+
+<body>
+    <div class="container">
+        <input type="text" id="title" class="form-control" placeholder="Title">
+        <input type="text" id="description" class="form-control" placeholder="Description">
+        <button id="button">Add</button>
+        <h4>To Do List Items</h4>
+        <div class="table-responsive">
+            <table id="tasks" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>Completed</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        </ul>
+        <div>
+            <button type="button" id="btn" style="display:none;">Clear Completed Tasks</button>
+        </div>
+    </div>
+    <div id="error" style="color: red;"></div>
+</body>
+
+</html>
